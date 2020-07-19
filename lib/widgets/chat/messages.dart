@@ -1,6 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+import './messge_bubble.dart';
 
 class Messages extends StatelessWidget {
   @override
@@ -13,7 +15,7 @@ class Messages extends StatelessWidget {
             : ListView.builder(
               reverse: true,
                 itemBuilder: (ctx, index) {
-                  return Text(chatSnapshot.data.documents[index]['text'],);
+                  return MessageBubble(chatSnapshot.data.documents[index]['text'],);
                 },
                 itemCount: chatSnapshot.data.documents.length,
               );
