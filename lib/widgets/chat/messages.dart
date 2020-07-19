@@ -28,7 +28,10 @@ class Messages extends StatelessWidget {
                         msg: chatSnapshot.data.documents[index]['text'],
                         isMe: chatSnapshot.data.documents[index]['userId'] ==
                             futureSnapshot.data.uid,
-                        key:ValueKey(chatSnapshot.data.documents[index].documentID),
+                        key: ValueKey(
+                            chatSnapshot.data.documents[index].documentID),
+                        userName: chatSnapshot.data.documents[index]
+                            ['username'],
                       );
                     },
                     itemCount: chatSnapshot.data.documents.length,

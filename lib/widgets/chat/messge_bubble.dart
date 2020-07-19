@@ -4,7 +4,9 @@ class MessageBubble extends StatelessWidget {
   final String msg;
   final bool isMe;
   final Key key;
-  MessageBubble({this.msg, this.isMe,this.key});
+  final String userName;
+
+  MessageBubble({this.msg, this.isMe, this.key, this.userName});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -24,13 +26,29 @@ class MessageBubble extends StatelessWidget {
           width: 140,
           margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-          child: Text(
-            msg,
-            style: TextStyle(
-              color: isMe == true
-                  ? Colors.black
-                  : Theme.of(context).accentTextTheme.headline1.color,
-            ),
+          child: Column(
+            crossAxisAlignment:
+                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              Text(
+                userName,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: isMe == true
+                      ? Colors.black
+                      : Theme.of(context).accentTextTheme.headline1.color,
+                ),
+              ),
+              Text(
+                msg,
+                style: TextStyle(
+                  color: isMe == true
+                      ? Colors.black
+                      : Theme.of(context).accentTextTheme.headline1.color,
+                ),
+                textAlign: isMe ? TextAlign.end : TextAlign.start,
+              ),
+            ],
           ),
         ),
       ],
