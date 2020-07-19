@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../widgets/auth_widget/auth_forms_widget.dart';
 
@@ -14,8 +17,9 @@ class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isLoading = false;
-  void _authFormSubmit(
-      String userName, String password, String email, bool isLogin) async {
+
+  void _authFormSubmit(String userName, String password, String email,
+      File imageFile, bool isLogin) async {
     AuthResult authResult;
     try {
       setState(() {
@@ -27,38 +31,39 @@ class _AuthScreenState extends State<AuthScreen> {
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('userImages')
+            .child(authResult.user.uid + '.jpg');
+
+        await ref.putFile(imageFile).onComplete;
+        final url=await ref.getDownloadURL();
+
         await Firestore.instance
             .collection('users')
             .document(authResult.user.uid)
             .setData({
           'username': userName,
           'email': email,
+          'imageUrl':url,
         });
-       
       }
     } on PlatformException catch (err) {
       var message = 'Please check your credentials';
       if (err.message != null) {
         message = err.message;
       }
-      // Builder(
-      //   builder: Scaffold.of(context).showSnackBar(
-      //     SnackBar(
-      //       content: Text(message),
-      //       backgroundColor: Theme.of(context).errorColor,
-      //     ),
-      //   ),
-      // );
-      // ;
+
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(
           content: Text(message),
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
-       setState(() {
-          _isLoading = false;
-        });
+      setState(() {
+        _isLoading = false;
+      });
     } catch (err) {
       print(err);
     }
@@ -69,7 +74,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
-      body: AuthForm(_authFormSubmit,_isLoading), //passing pointer
+      body: AuthForm(_authFormSubmit, _isLoading), //passing pointer
     );
   }
 }
