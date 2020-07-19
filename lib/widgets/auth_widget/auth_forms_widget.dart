@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+
+import '../pickers/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(
-      String userName, String password, String email, bool isLogin) formSubmit;
+      String userName, String password, String email,File image, bool isLogin) formSubmit;
   final bool isLoading;
-  AuthForm(this.formSubmit,this.isLoading);
+  AuthForm(this.formSubmit, this.isLoading);
   @override
   _AuthFormState createState() => _AuthFormState();
 }
@@ -16,15 +20,31 @@ class _AuthFormState extends State<AuthForm> {
   String _userPAssword = '';
   String _userEmail = '';
 
+  File _userImageFile;
+  void pickedImage(File image) {
+    _userImageFile = image;
+  }
+
   void _trySubmitForm() {
     final isValid = _formKey.currentState.validate();
     //to check or valid data in all field forms using their respective validator properties
-    FocusScope.of(context).unfocus(); //closes all the keyboards
+    FocusScope.of(context).unfocus();
+    //closes all the keyboards
+
+    if (_userImageFile == null && !_isLogin) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Please insert image"),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+      return;
+    }
     if (isValid) {
       _formKey.currentState.save();
       //it will go to every field any trigger onSaved
       widget.formSubmit(
-          _userName.trim(), _userPAssword.trim(), _userEmail.trim(), _isLogin);
+          _userName.trim(), _userPAssword.trim(), _userEmail.trim(),_userImageFile, _isLogin);
       print(_userEmail);
       print(_userName);
       print(_userPAssword);
@@ -43,6 +63,7 @@ class _AuthFormState extends State<AuthForm> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                if (!_isLogin) UserImagePicker(pickedImage),
                 TextFormField(
                   key: ValueKey('Email'),
                   keyboardType: TextInputType.emailAddress,
@@ -96,15 +117,13 @@ class _AuthFormState extends State<AuthForm> {
                 SizedBox(
                   height: 12,
                 ),
-                if(widget.isLoading==true)
-                  CircularProgressIndicator(),
-                
-                if(!widget.isLoading)
+                if (widget.isLoading == true) CircularProgressIndicator(),
+                if (!widget.isLoading)
                   RaisedButton(
                     child: Text(_isLogin ? 'Login' : 'SignUp'),
                     onPressed: _trySubmitForm,
                   ),
-                if(!widget.isLoading)
+                if (!widget.isLoading)
                   FlatButton(
                     child: Text(_isLogin
                         ? 'Create New Account'
