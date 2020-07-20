@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import './messge_bubble.dart';
+import 'message_bubble.dart';
 
 class Messages extends StatelessWidget {
   @override
@@ -32,6 +32,7 @@ class Messages extends StatelessWidget {
                             chatSnapshot.data.documents[index].documentID),
                         userName: chatSnapshot.data.documents[index]
                             ['username'],
+                        userImage:chatSnapshot.data.documents[index]['userImage'],
                       );
                     },
                     itemCount: chatSnapshot.data.documents.length,

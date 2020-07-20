@@ -24,6 +24,14 @@ class _NewMessageState extends State<NewMessage> {
         .get();
     return auth['username'];
   }
+  Future<String> getUserImage() async {
+    dynamic authUser = await FirebaseAuth.instance.currentUser();
+    dynamic auth = await Firestore.instance
+        .collection('users')
+        .document(authUser.uid)
+        .get();
+    return auth['imageUrl'];
+  }
 
   Future<Map<String, dynamic>> getUser() async {
     Map<String, dynamic> comdata = <String, dynamic>{
@@ -31,6 +39,7 @@ class _NewMessageState extends State<NewMessage> {
       'time': Timestamp.now(),
       'userId': await getUserId(),
       'username': await getUserName(),
+      'userImage':await getUserImage(),
     };
     return comdata;
   }
