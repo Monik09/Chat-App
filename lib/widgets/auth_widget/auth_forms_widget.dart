@@ -67,6 +67,9 @@ class _AuthFormState extends State<AuthForm> {
                 TextFormField(
                   key: ValueKey('Email'),
                   keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
                   validator: (value) {
                     if (value.isEmpty ||
                         !value.contains('@') &&
@@ -84,6 +87,9 @@ class _AuthFormState extends State<AuthForm> {
                 ),
                 if (!_isLogin)
                   TextFormField(
+                    textCapitalization: TextCapitalization.words,
+                    autocorrect: true,
+                    enableSuggestions: true,
                     key: ValueKey("UserName"),
                     validator: (value) {
                       if (value.isEmpty || value.length < 5) {
