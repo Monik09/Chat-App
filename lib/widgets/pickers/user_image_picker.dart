@@ -15,7 +15,11 @@ class _UserImagePickerState extends State<UserImagePicker> {
   dynamic _pickedImage;
   Future _pickImage() async {
     final picker = ImagePicker();
-    dynamic pickedImageFile = await picker.getImage(source: ImageSource.camera,imageQuality: 85,maxWidth: 150);
+    dynamic pickedImageFile = await picker.getImage(
+      source: ImageSource.camera,
+      imageQuality: 85,
+      maxWidth: 150,
+    );
     setState(() {
       _pickedImage = File(pickedImageFile.path);
     });
@@ -29,8 +33,11 @@ class _UserImagePickerState extends State<UserImagePicker> {
         CircleAvatar(
           radius: 40,
           backgroundColor: Colors.grey,
-          backgroundImage:
-              _pickedImage != null ? FileImage(_pickedImage) :AssetImage('assets/user5.png',),
+          backgroundImage: _pickedImage != null
+              ? FileImage(_pickedImage)
+              : AssetImage(
+                  'assets/user5.png',
+                ),
         ),
         FlatButton.icon(
           onPressed: _pickImage,
