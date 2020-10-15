@@ -20,23 +20,26 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.pink,
         accentColorBrightness: Brightness.dark,
         buttonTheme: ButtonTheme.of(context).copyWith(
-            buttonColor: Colors.pink,
-            textTheme: ButtonTextTheme.primary,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20))),
+          buttonColor: Colors.pink,
+          textTheme: ButtonTextTheme.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: StreamBuilder(
-          stream: FirebaseAuth.instance.onAuthStateChanged,
-          builder: (ctx, userSnapshot) {
-            if (userSnapshot.connectionState == ConnectionState.waiting) {
-              return SplashScreen();
-            }
-            if (userSnapshot.hasData) {
-              return ChatScreen();
-            }
-            return AuthScreen();
-          }),
+        stream: FirebaseAuth.instance.onAuthStateChanged,
+        builder: (ctx, userSnapshot) {
+          if (userSnapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreen();
+          }
+          if (userSnapshot.hasData) {
+            return ChatScreen();
+          }
+          return AuthScreen();
+        },
+      ),
     );
   }
 }

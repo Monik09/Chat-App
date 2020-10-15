@@ -11,7 +11,9 @@ class Messages extends StatelessWidget {
       future: FirebaseAuth.instance.currentUser(),
       builder: (ctx, futureSnapshot) {
         if (futureSnapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
         return StreamBuilder(
           stream: Firestore.instance
@@ -20,7 +22,9 @@ class Messages extends StatelessWidget {
               .snapshots(),
           builder: (ctx, chatSnapshot) {
             return (chatSnapshot.connectionState == ConnectionState.waiting)
-                ? Center(child: CircularProgressIndicator())
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
                 : ListView.builder(
                     reverse: true,
                     itemBuilder: (ctx, index) {
@@ -32,7 +36,8 @@ class Messages extends StatelessWidget {
                             chatSnapshot.data.documents[index].documentID),
                         userName: chatSnapshot.data.documents[index]
                             ['username'],
-                        userImage:chatSnapshot.data.documents[index]['userImage'],
+                        userImage: chatSnapshot.data.documents[index]
+                            ['userImage'],
                       );
                     },
                     itemCount: chatSnapshot.data.documents.length,

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../pickers/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
-  final void Function(
-      String userName, String password, String email,File image, bool isLogin) formSubmit;
+  final void Function(String userName, String password, String email,
+      File image, bool isLogin) formSubmit;
   final bool isLoading;
   AuthForm(this.formSubmit, this.isLoading);
   @override
@@ -27,10 +27,7 @@ class _AuthFormState extends State<AuthForm> {
 
   void _trySubmitForm() {
     final isValid = _formKey.currentState.validate();
-    //to check or valid data in all field forms using their respective validator properties
     FocusScope.of(context).unfocus();
-    //closes all the keyboards
-
     if (_userImageFile == null && !_isLogin) {
       Scaffold.of(context).showSnackBar(
         SnackBar(
@@ -42,12 +39,8 @@ class _AuthFormState extends State<AuthForm> {
     }
     if (isValid) {
       _formKey.currentState.save();
-      //it will go to every field any trigger onSaved
-      widget.formSubmit(
-          _userName.trim(), _userPAssword.trim(), _userEmail.trim(),_userImageFile, _isLogin);
-      print(_userEmail);
-      print(_userName);
-      print(_userPAssword);
+      widget.formSubmit(_userName.trim(), _userPAssword.trim(),
+          _userEmail.trim(), _userImageFile, _isLogin);
     }
   }
 
@@ -135,9 +128,11 @@ class _AuthFormState extends State<AuthForm> {
                         ? 'Create New Account'
                         : 'i already have an account'),
                     onPressed: () {
-                      setState(() {
-                        _isLogin = !_isLogin;
-                      });
+                      setState(
+                        () {
+                          _isLogin = !_isLogin;
+                        },
+                      );
                     },
                   ),
               ],
